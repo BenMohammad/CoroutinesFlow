@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-private val BASE_URL = "https://5caad70369c15c001484956a.mockapi.io/hoc081098/"
+private val BASE_URL = "BASE_URL"
 
 val dataModule = module {
     single{UserApiService(get())}
