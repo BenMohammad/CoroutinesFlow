@@ -1,12 +1,11 @@
 package com.benmohammad.coroutinesflow.ui.add
 
 import com.benmohammad.coroutinesflow.domain.entity.User
-import com.benmohammad.coroutinesflow.ui.main.MainContract
 import kotlinx.coroutines.flow.Flow
 
 interface AddContract {
     interface View {
-        fun intents(): Flow<AddContract.ViewIntent>
+        fun intents(): Flow<ViewIntent>
     }
 
     enum class ValidationError {
@@ -34,14 +33,14 @@ interface AddContract {
         object Submit: ViewIntent()
     }
 
-    sealed class PartialChange {
+    sealed class PartialStateChange {
         abstract fun reduce(viewState: ViewState): ViewState
 
-        data class ErrorsChanged(val errors: Set<ValidationError>): PartialChange() {
+        data class ErrorsChanged(val errors: Set<ValidationError>): PartialStateChange() {
             override fun reduce(viewState: ViewState) = viewState.copy(errors = errors)
         }
 
-        sealed class AddUser: PartialChange() {
+        sealed class AddUser: PartialStateChange() {
             object Loading: AddUser()
             data class AddUserSuccess(val user: User): AddUser()
             data class AddUserFailure(val user: User, val throwable: Throwable): AddUser()
@@ -58,6 +57,6 @@ interface AddContract {
 
     sealed class SingleEvent {
         data class AddUserSuccess(val user: User): SingleEvent()
-        data class AddUserFailure(val user: User, val error: Throwable): SingleEvent()
+        data class AddUserFailure(val user: User, val throwable: Throwable): SingleEvent()
     }
 }

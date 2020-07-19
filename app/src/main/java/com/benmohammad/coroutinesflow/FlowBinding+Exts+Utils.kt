@@ -81,7 +81,7 @@ fun <T> Flow<Flow<T>>.flattenFirst(): Flow<T> = channelFlow {
 
 private object UNINITIALIZED
 
-fun <A, B, R> Flow<A>.withLatestFrom(other: Flow<R>, transform: suspend (A, B) -> R): Flow<R> {
+fun <A, B, R> Flow<A>.withLatestFrom(other: Flow<B>, transform: suspend (A, B) -> R): Flow<R> {
     return flow {
         coroutineScope {
             val latestB = AtomicReference<Any>(UNINITIALIZED)
