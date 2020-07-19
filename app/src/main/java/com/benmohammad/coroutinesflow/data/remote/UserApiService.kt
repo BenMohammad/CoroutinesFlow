@@ -12,7 +12,7 @@ interface UserApiService {
     @DELETE("users/{id}")
     suspend fun remove(@Path("id") userId: String): UserResponse
 
-    @Headers("Content=Type: application/json")
+    @Headers("Content-Type: application/json")
     @POST("users")
     suspend fun add(@Body user: UserBody): UserResponse
 

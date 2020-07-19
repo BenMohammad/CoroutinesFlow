@@ -1,13 +1,11 @@
 package com.benmohammad.coroutinesflow.ui.main
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,11 +16,10 @@ import com.benmohammad.coroutinesflow.*
 import com.benmohammad.coroutinesflow.databinding.ActivityMainBinding
 import com.benmohammad.coroutinesflow.ui.add.AddActivity
 import com.benmohammad.coroutinesflow.ui.main.MainContract.*
-import com.benmohammad.coroutinesflow.ui.main.MainContract.ViewIntent.Initial
+import com.benmohammad.coroutinesflow.ui.main.MainContract.ViewState.Companion.initial
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import org.koin.androidx.viewmodel.compat.ViewModelCompat.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -37,7 +34,7 @@ class MainActivity : AppCompatActivity(), View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(mainBinding.root)
 
         setupView()
         bindVM(mainVM)
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity(), View {
 
 
     override fun intents()= merge(
-        flowOf(Initial),
+        flowOf(ViewIntent.Initial),
         mainBinding.swipeRefreshLayout.refreshes().map { MainContract.ViewIntent.Refresh },
         mainBinding.retryButton.clicks().map { MainContract.ViewIntent.Retry },
         removeChannel.asFlow().map{MainContract.ViewIntent.RemoveUser(it)}
@@ -129,7 +126,7 @@ class MainActivity : AppCompatActivity(), View {
                 swipeRefreshLayout.isRefreshing = false
             }
 
-            swipeRefreshLayout.isEnabled = !viewState.isLoading && viewState.error == null
+            swipeRefreshLayout.isEnabled = !viewState.isLoading && viewState.error === null
         }
     }
 }

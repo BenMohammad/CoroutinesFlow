@@ -2,6 +2,7 @@ package com.benmohammad.coroutinesflow.ui.main
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.benmohammad.coroutinesflow.domain.usecase.GetUsersUseCase
 import com.benmohammad.coroutinesflow.domain.usecase.RefreshGetUsersUseCase
 import com.benmohammad.coroutinesflow.domain.usecase.RemoveUserUseCase
@@ -40,6 +41,11 @@ class MainVM(
             intentFlow.filterIsInstance<ViewIntent.Initial>().take(1),
             intentFlow.filterNot { it is ViewIntent.Initial }
         )
+            .toPartialChangeFlow()
+            .sendSingleEvent()
+            .scan(initialVS){vs, change -> change.reduce(vs)}
+            .onEach { viewState.value = it }
+            .launchIn(viewModelScope)
 
     }
 
