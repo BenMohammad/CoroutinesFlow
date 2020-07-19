@@ -4,5 +4,5 @@ import com.benmohammad.coroutinesflow.domain.repository.UserRepository
 
 
 class GetUsersUseCase(private val userRepository: UserRepository) {
-    suspend operator fun invoke() = userRepository.getUsers()
+    operator fun invoke() = userRepository.getUsers()
 }

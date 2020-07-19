@@ -1,7 +1,6 @@
 package com.benmohammad.coroutinesflow.ui.main
 
 import com.benmohammad.coroutinesflow.domain.entity.User
-import com.google.android.material.internal.ViewOverlayImpl
 import kotlinx.coroutines.flow.Flow
 
 interface MainContract {
@@ -25,6 +24,14 @@ interface MainContract {
             avatar = domain.avatar,
             firstName = domain.firstName,
             lastName = domain.lastName
+        )
+
+        fun toDomain()= User(
+            id = id,
+            lastName = lastName,
+            firstName = firstName,
+            avatar = avatar,
+            email = email
         )
     }
 
@@ -93,7 +100,7 @@ interface MainContract {
 
         sealed class RemoveUser: PartialChange() {
             data class Success(val user: UserItem): RemoveUser()
-            data class Failure(val error: Throwable): RemoveUser()
+            data class Failure(val user: UserItem, val error: Throwable): RemoveUser()
 
             override fun reduce(vs: ViewState): ViewState = vs
         }
